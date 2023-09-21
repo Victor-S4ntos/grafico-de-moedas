@@ -16,19 +16,24 @@ async function conectaAPI() {
 
   const conecta = await fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL');
   const  ConectaTraduzido = await conecta.json();
+  let tempo = geraHorario();
+  let valor = ConectaTraduzido.USDBRL.ask;
+  adicionarDados(geraHorario, tempo, valor)
 }
-setInterval(()=> conectaAPI(), 50000);
+setInterval(()=> conectaAPI(), 5000);
 
 function geraHorario () {
   let data = new Date()
   let horario = data.getHours() + ':' + data.getMinutes() + ':' + data.getSeconds()
-  console.log(horario)
+  return horario
 }
 
 geraHorario()
 
 function adicionarDados (grafico, legenda, dados) {
-  grafico.data.labels.push(legenda);
-  grafico.data.datasets.forEach((dataset) => {dataset.data.push(dados)});
-  grafico.update();
+  graficoParaDolar.data.labels.push(legenda);
+  graficoParaDolar.data.datasets.forEach((dataset) => {
+    dataset.data.push(dados)
+  });
+  graficoParaDolar.update();
 }
